@@ -26,7 +26,6 @@ exports.handler = function(event, context, cb) {
 
 	const targetSvgUrls = event.svgs;
 	const targetHtmlUrl = event.html;
-	const targetCssUrl = event.css;
 	const outputName = event.name;
 	const timeout = parseInt(event.timeout) || 3000;
 
@@ -51,17 +50,19 @@ exports.handler = function(event, context, cb) {
 	}
 
 	// get text from html
-	if (!validUrl.isUri(targetHtmlUrl)) {
-		cb(`422, please provide a valid svg url, not: ${targetHtmlUrl}`);
-		return false;
-		}
 	let html = '';
-	let htmlProm = fetch(targetHtmlUrl)
-	.then((res) => res.text())
-	.then((htmlText) => html = htmlText)
-	.catch((error) => error);
-
-	proms.push(htmlProm);
+	if (targetHtmlUrl) {
+		if (!validUrl.isUri(targetHtmlUrl)) {
+			cb(`422, please provide a valid html url, not: ${targetHtmlUrl}`);
+			return false;
+			}
+		let htmlProm = fetch(targetHtmlUrl)
+		.then((res) => res.text())
+		.then((htmlText) => html = htmlText)
+		.catch((error) => error);
+	
+		proms.push(htmlProm);
+	}
 
 	Promise.all(proms).then(() => {
 		
@@ -70,12 +71,14 @@ exports.handler = function(event, context, cb) {
 		svgs = svgs.replace(/\r?\n|\r/g, ' ');
 
 		const targetBucket = process.env['BUCKET'];
+		// temp file hash name
+		const targetHash = crypto.createHash('md5').update(outputName).digest('hex');
 		const targetFilename = `${outputName}.png`;
 		
 		// Set the path to the phantomjs binary
 		var phantomPath = path.join(__dirname, 'phantomjs');
 	
-		const cmd = `${phantomPath} ./svgfltr.js '${svgs}' ${html} /tmp/${outputName}.png  ${screenWidth} ${screenHeight} ${timeout}`; // eslint-disable-line max-len
+		const cmd = `${phantomPath} ./svgfltr.js '${svgs}' '${html}' /tmp/${targetHash}.png  ${screenWidth} ${screenHeight} ${timeout}`; // eslint-disable-line max-len
 		// Launc the child process
 		exec(cmd, async (error, stdout, stderr) => {
 		
