@@ -5,11 +5,10 @@ var page = require('webpage').create(),
 
 svgs = system.args[1];
 html = system.args[2];
-css = system.args[3];
-output = system.args[4];
-width = system.args[5];
-height = system.args[6];
-timeout = system.args[7];
+output = system.args[3];
+width = system.args[4];
+height = system.args[5];
+timeout = system.args[6];
 
 console.log("Args: ", system.args);
 

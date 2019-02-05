@@ -75,7 +75,7 @@ exports.handler = function(event, context, cb) {
 		// Set the path to the phantomjs binary
 		var phantomPath = path.join(__dirname, 'phantomjs');
 	
-		const cmd = `${phantomPath} ./svgfltr.js '${svgs}' ${html} ${css} /tmp/${outputName}.png  ${screenWidth} ${screenHeight} ${timeout}`; // eslint-disable-line max-len
+		const cmd = `${phantomPath} ./svgfltr.js '${svgs}' ${html} /tmp/${outputName}.png  ${screenWidth} ${screenHeight} ${timeout}`; // eslint-disable-line max-len
 		// Launc the child process
 		exec(cmd, async (error, stdout, stderr) => {
 		
