@@ -8,15 +8,17 @@ const validUrl = require('valid-url');
 const fetch = require("node-fetch");
 
 // overall constants
-const screenWidth = 1280;
-const screenHeight = 1024;
+const screenWidth = 600;
+const screenHeight = 952.28;
 
-var allsvgs = [];
+var allsvgs = {};
 const getSVGData = (url) => {
 
 	return fetch(url)
 	.then((res) => res.text())
-	.then((svg) => allsvgs.push(svg))
+	.then((svg) => {
+		allsvgs[url] = svg;
+	})
 	.catch((error) => error);
 }
 
@@ -33,12 +35,13 @@ exports.handler = function(event, context, cb) {
 	  cb(`422, please provide an array of svgs`);
       return false;
 	}	
+
 	
 	// get text from SVGs
-	var svgs = [];
+	
 	var proms = []
 	for (var i = 0; i < targetSvgUrls.length; i++) {
-
+		
 		// check if the given url is valid
 		if (!validUrl.isUri(targetSvgUrls[i])) {
 			cb(`422, please provide a valid svg url, not: ${targetSvgUrls[i]}`);
@@ -65,10 +68,17 @@ exports.handler = function(event, context, cb) {
 	}
 
 	Promise.all(proms).then(() => {
-		
-		svgs = allsvgs.join('');
+		var svgs = '';
+		for (var i = 0; i < targetSvgUrls.length; i++) {
+			svgs += '\n' + allsvgs[targetSvgUrls[i]] + '\n';
+		}
+
     svgs = svgs.replace(/\<\?xml.+\?\>/g, '');
-		svgs = svgs.replace(/\r?\n|\r/g, ' ');
+		// svgs = svgs.replace(/\r?\n|\r/g, ' ');
+		allsvgs = {};
+
+		console.log(svgs);
+		
 
 		const targetBucket = process.env['BUCKET'];
 		// temp file hash name
@@ -79,9 +89,11 @@ exports.handler = function(event, context, cb) {
 		var phantomPath = path.join(__dirname, 'phantomjs');
 	
 		const cmd = `${phantomPath} ./svgfltr.js '${svgs}' '${html}' /tmp/${targetHash}.png  ${screenWidth} ${screenHeight} ${timeout}`; // eslint-disable-line max-len
+		// console.log(cmd);
+		
 		// Launc the child process
 		exec(cmd, async (error, stdout, stderr) => {
-		
+			
 			if (error) {
 				// the command failed (non-zero), fail the entire call
 				console.warn(`exec error: ${error}`, stdout, stderr);
