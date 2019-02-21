@@ -17,6 +17,6 @@ takes a name, an array of svg urls and a html url, html should contain a div wit
 <table border="0">
   <tr>
     <td bgcolor="#000"><a href="https://gittron.me/"><img src="https://s3.amazonaws.com/od-flat-svg/0x959cd3a31cc611630423f9facf8a9b95.png" alt="drawing" width="50"/></a></td>
-    <td bgcolor="#000"><font color="#FFF">DONATE THROUGH GITTRON</font></td>
+    <td bgcolor="#000"><font color="#FFF">SUPPORT US WITH GITTRON</font></td>
   </tr>
 </table>
