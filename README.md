@@ -14,4 +14,4 @@ The PhantomJS binary is included in this repository
 takes a name, an array of svg urls and a html url, html should contain a div with id of "surface"
 
 
-<table border="0"><tr>  <td><a href="https://gittron.me/bots/0x7bd19b0900af2106fed44cb8d9de11f3"><img  src="https://s3.amazonaws.com/od-flat-svg/0x7bd19b0900af2106fed44cb8d9de11f3.png"  alt="gittron"  width="50"/></a></td><td>SUPPORT US WITH GITTRON</td></tr></table>
+<table border="0"><tr>  <td><a href="https://gittron.me/bots/0x585aed8a56d3fc4a44cf29d5f6b0ca0f"><img src="https://s3.amazonaws.com/od-flat-svg/0x585aed8a56d3fc4a44cf29d5f6b0ca0f.png" alt="gittron" width="50"/></a></td><td><a href="https://gittron.me/bots/0x585aed8a56d3fc4a44cf29d5f6b0ca0f">SUPPORT US WITH GITTRON</a></td></tr></table>
